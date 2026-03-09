@@ -2,38 +2,51 @@ import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-export function SpaceDust() {
+type SpaceDustProps = {
+  count?: number
+  radius?: number
+}
+
+export default function SpaceDust({
+  count = 1200,
+  radius = 260,
+}: SpaceDustProps) {
   const ref = useRef<THREE.Points>(null)
 
-  const { positions } = useMemo(() => {
-    const count = 2400
-    const pos = new Float32Array(count * 3)
+  const positions = useMemo(() => {
+    const arr = new Float32Array(count * 3)
 
-    for (let i = 0; i < count; i += 1) {
-      const radius = 220 + Math.random() * 760
+    for (let i = 0; i < count; i++) {
+      const r = Math.random() * radius
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
-      const x = radius * Math.sin(phi) * Math.cos(theta)
-      const y = radius * Math.cos(phi) * 0.42
-      const z = radius * Math.sin(phi) * Math.sin(theta)
-      pos.set([x, y, z], i * 3)
+
+      arr[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+      arr[i * 3 + 1] = r * Math.cos(phi) * 0.35
+      arr[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta)
     }
 
-    return { positions: pos }
-  }, [])
+    return arr
+  }, [count, radius])
 
   useFrame((_, delta) => {
     if (!ref.current) return
-    ref.current.rotation.y += delta * 0.002
-    ref.current.rotation.x += delta * 0.00025
+    ref.current.rotation.y += delta * 0.003
   })
 
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" array={positions} count={positions.length / 3} itemSize={3} />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial color="#d7e5ff" size={0.48} transparent opacity={0.24} depthWrite={false} sizeAttenuation />
+      <pointsMaterial
+        size={0.12}
+        sizeAttenuation
+        transparent
+        opacity={0.4}
+        depthWrite={false}
+        color="#d8d3c5"
+      />
     </points>
   )
 }

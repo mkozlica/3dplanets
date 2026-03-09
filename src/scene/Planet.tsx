@@ -6,7 +6,7 @@ import { useSceneStore } from '../hooks/useSceneStore'
 import { radiusForEarth, distanceForAU } from '../lib/math'
 import { ENABLE_TEXTURES } from '../lib/renderConfig'
 import type { PlanetDefinition } from '../types'
-import { OrbitRing } from './OrbitRing'
+import OrbitRing from './OrbitRing'
 
 function createProceduralTexture(def: PlanetDefinition, size = 2048) {
   const canvas = document.createElement('canvas')

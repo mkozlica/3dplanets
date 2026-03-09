@@ -10,7 +10,7 @@ import { AsteroidBelt } from './AsteroidBelt'
 import { CosmicBackdrop } from './CosmicBackdrop'
 import { CameraController } from './CameraController'
 import { Planet } from './Planet'
-import { SpaceDust } from './SpaceDust'
+import SpaceDust from './SpaceDust'
 import { Sun } from './Sun'
 
 function SceneFog() {
